@@ -2,7 +2,9 @@
   <div id="app">
     
     <div v-show="resultado" class="card">
-      <h1>  O Jogador {{jogada%2 > 0 ? '1°' : '2°'}} Venceu!</h1>
+     <h1 v-if="empate">Houve um Empate</h1>
+      <h1 v-else>  O Jogador {{jogada%2 > 0 ? '1°' : '2°'}} Venceu!</h1>
+     
 
       <button id="novoJogo" @click="novoJogo">Novo Jogo?</button>
       
@@ -28,12 +30,12 @@
         <div class="escolha" v-else>
 
           <h2> Vez do jogador {{jogada%2 == 0 ? 1 : 2}}°</h2>
-
+          
         </div>
 
       </div>
   
-        <div class="container">
+        <div class="container" :style="{'pointer-events': start}">
           
             <div class="traco"  :class="classe"></div>
         
@@ -165,6 +167,8 @@ export default {
       classe:'',
       ativador: '',
       resultado: false,
+      start: 'none',
+      empate: false
     }
   },
   methods:{
@@ -173,9 +177,11 @@ export default {
       if(params == 'circulo'){
           this.jogador1 = 'circulo'
           this.jogador2 = 'x'
+          this.start = 'auto'
       } else{
           this.jogador1 = 'x'
           this.jogador2 = 'circulo'
+          this.start = 'auto'
       }
     },
 
@@ -197,6 +203,7 @@ export default {
 
    batidaClasse(params){
     this.classe = params
+    this.start = 'none'
     this.ativador = 'opacity: 0.3;'
     setTimeout(() => { this.resultado = true}, "1000")
    },
@@ -209,9 +216,10 @@ export default {
     this.resultado = false
     this.jogador1 = ''
     this.jogador2 = ''
-   }
-   
+   },
+
   },
+
   
   watch:{
     figuras:{
@@ -251,7 +259,16 @@ export default {
         }
       },
       deep: true
+    },
+
+    jogada(){
+      if(this.jogada == 9 && this.classe === ''){
+        this.batidaClasse()
+        this.empate = true
+      } 
+
     }
+   
   }
   
 }

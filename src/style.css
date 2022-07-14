@@ -182,5 +182,11 @@
     width: 65%;
     height: 35%;
   }
+  .batidaColuna3{
+    margin-left: 60%;
+  }
+  .batidaColuna1{
+    margin-left: -60%;
+  }
   
 }
